@@ -9,3 +9,5 @@ pydantic
 alembic
 python-dotenv
 httpx
+python-jose
+passlib[bcrypt]
