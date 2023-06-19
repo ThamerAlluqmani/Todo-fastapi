@@ -11,7 +11,7 @@ from app.database import Session, engine
 session = Session(bind=engine)
 
 
-async def login_(user: LoginModel, Authorize: AuthJWT = Depends()):
+async def login(user: LoginModel, Authorize: AuthJWT = Depends()):
     db_user = session.query(User).filter(User.email == user.email).first()
     if db_user and check_password_hash(db_user.password, user.password):
         access_token = Authorize.create_access_token(subject=db_user.email)

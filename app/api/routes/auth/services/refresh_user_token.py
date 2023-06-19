@@ -3,7 +3,7 @@ from fastapi.exceptions import HTTPException
 from fastapi_jwt_auth import AuthJWT
 
 
-async def refresh_(Authorize: AuthJWT = Depends()):
+async def refresh_user_token(Authorize: AuthJWT = Depends()):
     try:
         Authorize.jwt_refresh_token_required()
         current_user = Authorize.get_jwt_subject()

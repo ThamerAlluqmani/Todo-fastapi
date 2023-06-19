@@ -8,7 +8,7 @@ from app.database import Session, engine
 session = Session(bind=engine)
 
 
-async def signup_(user: SignupModel, session: Session):
+async def signup(user: SignupModel, session: Session):
     db_email = session.query(User).filter(User.email == user.email).first()
     if db_email:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
