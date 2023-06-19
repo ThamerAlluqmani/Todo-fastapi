@@ -1,8 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
 
 
-class LoginModel(BaseModel):
+class LoginResponseModel(BaseModel):
     email: str
     password: str
 
@@ -16,8 +15,8 @@ class LoginModel(BaseModel):
         }
 
 
-class SignupModel(BaseModel):
-    id: Optional[int]
+class SignupRequestModel(BaseModel):
+    id: int|None
     email: str
     password: str
     name: str
@@ -33,3 +32,9 @@ class SignupModel(BaseModel):
                 "phone": "0512345678",
             }
         }
+
+class SignupResponseModel(BaseModel):
+    email: str
+    name: str
+    phone: str
+

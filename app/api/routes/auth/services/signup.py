@@ -1,14 +1,13 @@
-from ..schemas import SignupModel
 from ..models import User
 from werkzeug.security import generate_password_hash
 from fastapi.exceptions import HTTPException
 from fastapi import status
 from app.database import Session, engine
+from ..schemas import SignupResponseModel
 
-session = Session(bind=engine)
 
-
-async def signup(user: SignupModel, session: Session):
+async def signup(user):
+    session = Session(bind=engine)
     db_email = session.query(User).filter(User.email == user.email).first()
     if db_email:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
@@ -21,4 +20,11 @@ async def signup(user: SignupModel, session: Session):
     session.add(new_user)
     session.commit()
     session.refresh(new_user)
-    return new_user
+
+    new_user_data = SignupResponseModel(
+        email=new_user.email,
+        name=new_user.name,
+        phone=new_user.phone,
+    )
+
+    return new_user_data

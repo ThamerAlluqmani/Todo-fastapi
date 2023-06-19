@@ -1,13 +1,12 @@
-from fastapi import status, Depends
+from fastapi import status
 from fastapi.exceptions import HTTPException
-from fastapi_jwt_auth import AuthJWT
 
 
-async def refresh_user_token(Authorize: AuthJWT = Depends()):
+async def refresh_user_token(authorize):
     try:
-        Authorize.jwt_refresh_token_required()
-        current_user = Authorize.get_jwt_subject()
-        new_access_token = Authorize.create_access_token(subject=current_user)
+        authorize.jwt_refresh_token_required()
+        current_user = authorize.get_jwt_subject()
+        new_access_token = authorize.create_access_token(subject=current_user)
         return {"access_token": new_access_token}
     except Exception as e:
         raise HTTPException(
