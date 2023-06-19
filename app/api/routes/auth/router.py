@@ -28,7 +28,7 @@ async def login_(user: LoginResponseModel, authorize: AuthJWT = Depends()):
 
 
 # refresh token
-@router.get("/refresh")
+@router.post("/refresh")
 async def refresh_user_token_(authorize: AuthJWT = Depends()):
     response = await refresh_user_token(authorize=authorize)
     return response
