@@ -2,7 +2,7 @@ from typing import Union
 from fastapi import FastAPI
 from fastapi_jwt_auth import AuthJWT
 from app.config import Settings
-from app.api.routes.auth.router import auth_router
+from app.api.routes.auth.router import router
 
 app = FastAPI()
 
@@ -17,4 +17,4 @@ def read_root():
     return {"Hello": "World"}
 
 
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(router, prefix="/auth", tags=["auth"])
