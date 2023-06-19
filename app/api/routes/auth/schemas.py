@@ -22,7 +22,6 @@ class SignupModel(BaseModel):
     password: str
     name: str
     phone: str
-    university_id: int
 
     class Config:
         orm_mode = True
@@ -32,6 +31,5 @@ class SignupModel(BaseModel):
                 "password": "password",
                 "name": "John Doe",
                 "phone": "0512345678",
-                "university_id": 1,
             }
         }
