@@ -8,6 +8,7 @@ werkzeug
 pydantic
 alembic
 python-dotenv
+python-multipart
 httpx
 python-jose
 passlib[bcrypt]

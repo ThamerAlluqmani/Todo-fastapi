@@ -1,7 +1,15 @@
 from typing import Union
 from fastapi import FastAPI
+from fastapi_jwt_auth import AuthJWT
+from app.config import Settings
+from app.api.routes.auth.router import auth_router
 
 app = FastAPI()
+
+
+@AuthJWT.load_config
+def get_config():
+    return Settings()
 
 
 @app.get("/")
@@ -9,6 +17,4 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
