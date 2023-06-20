@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 
-class CreateRequestModel(BaseModel):
+class CreateItemRequestModel(BaseModel):
+    id: int | None
     title: str
-    description: str = None
+    description: str | None
     owner_id: int
 
     class Config:
@@ -17,20 +18,14 @@ class CreateRequestModel(BaseModel):
         }
 
 
-class CreateResponseModel(BaseModel):
+class CreateItemResponseModel(BaseModel):
     title: str
-    description: str = None
+    description: str | None
 
 
-class UpdateResponseModel(BaseModel):
-    id: int
-    name: str
-    description: str = None
-
-
-class UpdateRequestModel(BaseModel):
-    name: str
-    description: str = None
+class UpdateItemRequestModel(BaseModel):
+    title: str | None
+    description: str | None
 
     class Config:
         orm_mode = True
@@ -41,13 +36,7 @@ class UpdateRequestModel(BaseModel):
             }
         }
 
-# class GetResponseModel(BaseModel):
-#     id: int
-#     name: str
-#     description: str = None
-#
-#
-# class DeleteRequestModel(BaseModel):
-#     id: int
-#     name: str
-#     description: str = None
+
+class UpdateItemResponseModel(BaseModel):
+    title: str
+    description: str

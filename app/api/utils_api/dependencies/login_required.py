@@ -6,5 +6,5 @@ def login_required(authorize: AuthJWT = Depends()):
     try:
         authorize.jwt_required()
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Authorized to access this route")
     return authorize.get_jwt_subject()

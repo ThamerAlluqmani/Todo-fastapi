@@ -1,63 +1,62 @@
 from fastapi import APIRouter, status, Depends
 from fastapi_jwt_auth import AuthJWT
-from .services.create_item import create_item
-from .services.list_items import list_items
-from .services.get_item import get_item
-from .services.update_item import update_item
-from .services.delete_item import delete_item
-from .schemas import CreateRequestModel
-from .schemas import UpdateRequestModel
-from app.api.utils_api.dependencies import get_db_session
-
+from .services.create_item_ import create_item_
+from .services.list_items_ import list_items_
+from .services.get_item_ import get_item_
+from .services.update_item_ import update_item_
+from .services.delete_item_ import delete_item_
+from .schemas import CreateItemRequestModel, CreateItemResponseModel, UpdateItemRequestModel, UpdateItemResponseModel
+from app.api.utils_api.dependencies import get_db_session, login_required
+from sqlalchemy.orm.session import Session
 
 router = APIRouter(prefix="/items", tags=["items"])
 
 
 @router.get("/")
-async def list_items_(
-        jwt: AuthJWT = Depends(),
-        session=Depends(get_db_session)
+def list_items(
+        jwt: AuthJWT = Depends(login_required),
+        session: Session = Depends(get_db_session)
 ):
-    response = await list_items(authorize=jwt, session=session)
+    response = list_items_(authorize=jwt, session=session)
     return response
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
-async def create_item_(
-        item: CreateRequestModel,
-        authorize: AuthJWT = Depends(),
-        session=Depends(get_db_session)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=CreateItemResponseModel)
+def create_item(
+        item: CreateItemRequestModel,
+        authorize: AuthJWT = Depends(login_required),
+        session: Session = Depends(get_db_session)
 ):
-    response = await create_item(item=item,authorize=authorize,session=session)
+    response = create_item_(item=item, authorize=authorize, session=session)
     return response
 
 
 @router.get("/{item_id}", status_code=status.HTTP_200_OK)
-async def get_item_(
+def get_item(
         item_id: int,
-        authorize: AuthJWT = Depends(),
+        authorize: AuthJWT = Depends(login_required),
         session=Depends(get_db_session)
 ):
-    response = await get_item(item_id=item_id, authorize=authorize, session=session)
+    response = get_item_(item_id=item_id, authorize=authorize, session=session)
     return response
 
 
-@router.put("/{item_id}", status_code=status.HTTP_200_OK)
-async def update_item_(
+@router.put("/{item_id}", status_code=status.HTTP_200_OK, response_model=UpdateItemResponseModel)
+def update_item(
         item_id: int,
-        item: UpdateRequestModel,
-        authorize: AuthJWT = Depends(),
-        session=Depends(get_db_session)
+        item: UpdateItemRequestModel,
+        authorize: AuthJWT = Depends(login_required),
+        session: Session = Depends(get_db_session)
 ):
-    response = await update_item(item_id=item_id, item=item, authorize=authorize, session=session)
+    response = update_item_(item_id=item_id, item=item, authorize=authorize, session=session)
     return response
 
 
 @router.delete("/{item_id}", status_code=status.HTTP_200_OK)
-def delete_item_(
+def delete_item(
         item_id: int,
-        authorize: AuthJWT = Depends(),
+        authorize: AuthJWT = Depends(login_required),
         session=Depends(get_db_session)
 ):
-    response = delete_item(item_id=item_id, authorize=authorize, session=session)
+    response = delete_item_(item_id=item_id, authorize=authorize, session=session)
     return response
