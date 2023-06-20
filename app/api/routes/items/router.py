@@ -8,6 +8,7 @@ from .services.delete_item_ import delete_item_
 from .schemas import CreateItemRequestModel, CreateItemResponseModel, UpdateItemRequestModel, UpdateItemResponseModel
 from app.api.utils_api.dependencies import get_db_session, login_required
 from sqlalchemy.orm.session import Session
+from app.api.utils_api.dependencies.pagenation_query_params import PaginationQueryParams
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -15,9 +16,10 @@ router = APIRouter(prefix="/items", tags=["items"])
 @router.get("/")
 def list_items(
         jwt: AuthJWT = Depends(login_required),
-        session: Session = Depends(get_db_session)
+        session: Session = Depends(get_db_session),
+        page: PaginationQueryParams = Depends(PaginationQueryParams),
 ):
-    response = list_items_(authorize=jwt, session=session)
+    response = list_items_(authorize=jwt, session=session, limit=page.limit, offset=page.offset,)
     return response
 
 
