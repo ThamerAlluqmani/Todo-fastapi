@@ -16,7 +16,7 @@ class LoginResponseModel(BaseModel):
 
 
 class SignupRequestModel(BaseModel):
-    id: int|None
+    id: int | None
     email: str
     password: str
     name: str
@@ -33,8 +33,8 @@ class SignupRequestModel(BaseModel):
             }
         }
 
+
 class SignupResponseModel(BaseModel):
     email: str
     name: str
     phone: str
-

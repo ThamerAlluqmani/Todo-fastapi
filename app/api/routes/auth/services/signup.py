@@ -1,13 +1,14 @@
 from ..models import User
+from sqlalchemy.orm.session import Session
 from werkzeug.security import generate_password_hash
 from fastapi.exceptions import HTTPException
 from fastapi import status
-from ..schemas import SignupResponseModel
+from ..schemas import SignupResponseModel, SignupRequestModel
 
 
-async def signup(user, session):
+def signup(user: SignupRequestModel, session: Session):
     db_email = session.query(User).filter(User.email == user.email).first()
-    if db_email:
+    if db_email is not None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
     new_user = User(
         email=user.email,
@@ -16,13 +17,6 @@ async def signup(user, session):
         phone=user.phone,
     )
     session.add(new_user)
-    session.commit()
-    session.refresh(new_user)
-
-    new_user_data = SignupResponseModel(
-        email=new_user.email,
-        name=new_user.name,
-        phone=new_user.phone,
-    )
-
+    new_user_data = SignupResponseModel(**new_user.__dict__)
     return new_user_data
+
