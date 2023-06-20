@@ -5,7 +5,6 @@ class CreateItemRequestModel(BaseModel):
     id: int | None
     title: str
     description: str | None
-    owner_id: int
 
     class Config:
         orm_mode = True
