@@ -3,11 +3,9 @@ from werkzeug.security import check_password_hash
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import HTTPException
 from fastapi import status
-from app.database import Session, engine
 
 
-async def login(user, authorize):
-    session = Session(bind=engine)
+async def login(user, authorize, session):
     db_user = session.query(User).filter(User.email == user.email).first()
     if db_user and check_password_hash(db_user.password, user.password):
         access_token = authorize.create_access_token(subject=db_user.email)

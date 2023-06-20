@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 class Item(Base):
     __tablename__ = 'items'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String, index=True)
     description = Column(Text, index=True)
     owner_id = Column(Integer, ForeignKey('users.id'))

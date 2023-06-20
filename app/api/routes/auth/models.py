@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(80), unique=True)
+    email = Column(String, unique=True)
     password = Column(Text)
-    name = Column(String(50))
-    phone = Column(String(20))
+    name = Column(String)
+    phone = Column(String)
     is_admin = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
     is_verified = Column(Boolean, default=False)
