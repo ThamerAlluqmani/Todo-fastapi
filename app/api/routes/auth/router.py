@@ -1,45 +1,48 @@
 from fastapi import APIRouter, status, Depends
+from sqlalchemy.orm import Session
 from .schemas import SignupRequestModel, LoginResponseModel, SignupResponseModel
 from fastapi_jwt_auth import AuthJWT
-from .services.signup import signup
-from .services.login import login
-from .services.refresh_user_token import refresh_user_token
-from .services.get_user_info import get_user_info
-from app.api.utils_api.dependencies import get_db_session
+from .services.signup_ import signup_
+from .services.login_ import login_
+from .services.refresh_user_token_ import refresh_user_token_
+from .services.get_user_info_ import get_user_info_
+from app.api.utils_api.dependencies import get_db_session, login_required, refresh_token_required
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.get("/")
-def get_user_info_(
-        authorize: AuthJWT = Depends(),
-        session=Depends(get_db_session)
+def get_user_info(
+        authorize: AuthJWT = Depends(login_required),
+        session: Session = Depends(get_db_session)
 ):
-    response = get_user_info(authorize=authorize, session=session)
+    response = get_user_info_(authorize=authorize, session=session)
     return response
 
 
 @router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=SignupResponseModel)
-def signup_(
+def signup(
         user: SignupRequestModel,
-        session=Depends(get_db_session)
+        session: Session = Depends(get_db_session)
 ):
-    response = signup(user=user, session=session)
+    response = signup_(user=user, session=session)
     return response
 
 
 @router.post("/login", status_code=status.HTTP_200_OK)
-def login_(
+def login(
         user: LoginResponseModel,
         authorize: AuthJWT = Depends(),
-        session=Depends(get_db_session)
+        session: Session = Depends(get_db_session)
 ):
-    response = login(user=user, authorize=authorize, session=session)
+    response = login_(user=user, authorize=authorize, session=session)
     return response
 
 
 # refresh token
 @router.post("/refresh")
-def refresh_user_token_(authorize: AuthJWT = Depends()):
-    response = refresh_user_token(authorize=authorize)
+def refresh_user_token(
+        authorize: AuthJWT = Depends(refresh_token_required)
+):
+    response = refresh_user_token_(authorize=authorize)
     return response

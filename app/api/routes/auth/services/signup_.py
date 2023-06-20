@@ -6,7 +6,7 @@ from fastapi import status
 from ..schemas import SignupResponseModel, SignupRequestModel
 
 
-def signup(user: SignupRequestModel, session: Session):
+def signup_(user: SignupRequestModel, session: Session):
     db_email = session.query(User).filter(User.email == user.email).first()
     if db_email is not None:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")

@@ -1,17 +1,12 @@
 from ..models import User
 from fastapi.exceptions import HTTPException
 from fastapi import status
+from sqlalchemy.orm.session import Session
+from fastapi_jwt_auth import AuthJWT
 
 
-def get_user_info(authorize, session):
-    try:
-        authorize.jwt_required()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token, please provide a refresh token"
-        )
-    current_user_email = authorize.get_jwt_subject()
+def get_user_info_(authorize: AuthJWT, session: Session):
+    current_user_email = authorize
     db_user = session.query(User).filter(User.email == current_user_email).first()
 
     if db_user is not None:
