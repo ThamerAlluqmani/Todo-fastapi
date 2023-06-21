@@ -12,3 +12,4 @@ python-multipart
 httpx
 python-jose
 passlib[bcrypt]
+celery
