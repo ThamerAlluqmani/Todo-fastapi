@@ -16,6 +16,7 @@ def get_item_(item_id: int, authorize, session):
             "id": db_item.id,
             "title": db_item.title,
             "description": db_item.description,
+            "is_done": db_item.is_done,
         }
         return item_data
 

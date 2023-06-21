@@ -39,3 +39,4 @@ class UpdateItemRequestModel(BaseModel):
 class UpdateItemResponseModel(BaseModel):
     title: str
     description: str
+    is_done: bool
