@@ -9,7 +9,7 @@ from .schemas import CreateItemRequestModel, CreateItemResponseModel, UpdateItem
 from app.api.utils_api.dependencies import get_db_session, login_required
 from sqlalchemy.orm.session import Session
 from app.api.utils_api.dependencies.pagenation_query_params import PaginationQueryParams
-
+from app.celery_worker.tasks import change_item_status_
 router = APIRouter(prefix="/items", tags=["items"])
 
 
@@ -19,7 +19,7 @@ def list_items(
         session: Session = Depends(get_db_session),
         page: PaginationQueryParams = Depends(PaginationQueryParams),
 ):
-    response = list_items_(authorize=jwt, session=session, limit=page.limit, offset=page.offset,)
+    response = list_items_(authorize=jwt, session=session, limit=page.limit, offset=page.offset, )
     return response
 
 
@@ -62,3 +62,11 @@ def delete_item(
 ):
     response = delete_item_(item_id=item_id, authorize=authorize, session=session)
     return response
+
+
+@router.put("/{item_id}/sync")
+def change_item_status(
+        item_id: int
+):
+    result = change_item_status_.delay(item_id=item_id)
+    return {"task_id": result.id}

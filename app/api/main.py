@@ -4,6 +4,7 @@ from app.config import Settings
 from app.api.routes.auth.router import router as auth_router
 from app.api.routes.items.router import router as items_router
 from fastapi_pagination import add_pagination
+import celery
 
 app = FastAPI()
 add_pagination(app)
