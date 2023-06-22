@@ -1,14 +1,18 @@
+from sqlalchemy import select
+
 from .app import app
+from sqlalchemy.orm.session import Session
 from app.api.utils_api.dependencies import get_db_session
 from app.api.routes.items.models import Item
-from sqlalchemy.orm.session import Session
 
 
 @app.task
 def change_item_status_(item_id: int):
     session: Session = next(get_db_session())
-    db_item = session.query(Item).filter(Item.id == item_id).first()
-    if db_item is not None:
-        db_item.is_done = True
-        session.commit()
+    stmt = select(Item).where(Item.id == item_id)
+    db_item = session.execute(stmt).scalar_one_or_none()
+    if db_item is None:
+        return "Item not found"
 
+    db_item.is_done = True
+    session.commit()

@@ -13,3 +13,4 @@ httpx
 python-jose
 passlib[bcrypt]
 celery
+black
