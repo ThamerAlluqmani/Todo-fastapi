@@ -1,6 +1,8 @@
 from app.database import Base
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
+server_default = "false"
+
 
 class User(Base):
     __tablename__ = "users"
